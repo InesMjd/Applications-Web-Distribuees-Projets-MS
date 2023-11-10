@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RequestMapping("/candidats")
 @RestController
+@RequestMapping("/candidats")
 public class CandidatRestAPI {
     private String title="Hello, i'm the candidate Micro Service";
 
@@ -19,6 +19,11 @@ public class CandidatRestAPI {
 
     @Autowired
     private CandidatService candidatService;
+
+    @RequestMapping
+    public List<Candidat> getListCandid() {
+        return candidatService.getAll();
+    }
 
     @PostMapping(consumes = MediaType.APPLICATION_XML_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
