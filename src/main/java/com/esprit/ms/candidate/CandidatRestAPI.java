@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@RequestMapping("/candidats")
 @RestController
 public class CandidatRestAPI {
     private String title="Hello, i'm the candidate Micro Service";
