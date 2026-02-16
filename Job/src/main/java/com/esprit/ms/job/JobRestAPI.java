@@ -31,8 +31,8 @@ public class JobRestAPI {
         return new ResponseEntity<>(jobService.getAll(), HttpStatus.OK);
     }
 
-    @RequestMapping("/{id}")
-    public Job getJobById(@PathVariable int id) {
+    @GetMapping("/{id}")
+    public JobDTO getJob(@PathVariable int id) {
 
         return jobService.getJobById(id);
     }

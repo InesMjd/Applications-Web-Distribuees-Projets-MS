@@ -18,8 +18,18 @@ public class JobService {
         return jobRepository.findAll();
     }
 
-    public Job getJobById(int id){
+  /*  public Job getJobById(int id){
         return jobRepository.findById(id).orElse(null);
+    }*/
+
+
+    public JobDTO getJobById(int id) {
+        Job job = jobRepository.findById(id).get();
+
+        return new JobDTO(
+                job.getService(),
+                job.isEtat()
+        );
     }
 
     public Job updateJob(int id, Job newJob) {
