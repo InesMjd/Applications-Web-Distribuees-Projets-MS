@@ -2,18 +2,17 @@ package com.esprit.ms.job;
 
 public class JobDTO {
 
-  //  private int id;
     private String service;
+
     private boolean etat;
 
-    public JobDTO() {}
+    public JobDTO() {
+    }
 
-    public JobDTO( String service, boolean etat) {
-     //   this.id = id;
+    public JobDTO(String service, boolean etat) {
         this.service = service;
         this.etat = etat;
     }
-
 
 
     public String getService() {
@@ -31,4 +30,7 @@ public class JobDTO {
     public void setEtat(boolean etat) {
         this.etat = etat;
     }
+
+
+
 }

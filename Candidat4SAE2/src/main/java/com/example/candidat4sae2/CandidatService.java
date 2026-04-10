@@ -3,6 +3,7 @@ package com.example.candidat4sae2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 import java.util.List;
 
 @Service
@@ -15,11 +16,14 @@ public class CandidatService {
     @Autowired
     private JobClient jobClient;
 
-    public List<Job> getAllJobs(){
-        return jobClient.getAllJobs();
+    public List<Job> getJobs(){
+        return jobClient.getListJob();
+        //return new ArrayList<>(); // temporaire
     }
+
     public Job getJobById(int id){
         return jobClient.getJobById(id);
+       // return null;
     }
 
     public Candidat addCandidat(Candidat candidate) {

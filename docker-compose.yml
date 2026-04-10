@@ -1,0 +1,111 @@
+version: '3.9'
+
+services:
+
+  config-server:
+    build: ./ConfigServer4SAE8
+    image: inesmjd/configserver:2.0
+    container_name: ConfigServer
+    ports:
+      - "8686:8686"
+    depends_on:
+      - eureka-server
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+
+  job:
+    build: ./Job
+    image: inesmjd/job:2.0
+    container_name: job
+    ports:
+      - "8081:8081"
+    depends_on:
+      - mysqldb
+      - eureka-server
+      - config-server
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8686
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysqldb:3306/jobTest?createDatabaseIfNotExist=true&useSSL=false&max_allowed_packet=15728640
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+
+  candidat:
+    build: ./Candidat4SAE2
+    image: inesmjd/candidat:sae.2
+    container_name: candidat
+    ports:
+      - "8082:8080"
+    depends_on:
+      - eureka-server
+      - config-server
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8686
+   # volumes:
+     # - ./data/h2:Datatbase/Data
+  
+
+  eureka-server:
+    build: ./Eureka4TWIN4
+    image: inesmjd/eureka:2.0
+    container_name: eureka
+    ports:
+      - "8761:8761"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+
+  API-gateway:
+    build: ./APIGateway4SAE1
+    image: inesmjd/apigateway:sae.1
+    container_name: gateway
+    ports:
+      - "8088:8088"
+    depends_on:
+      - eureka-server
+      - config-server
+      - candidat
+      - job
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8686
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=http://localhost:8066/realms/JoabBoard4SAE1
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://keycloak:8066/realms/JoabBoard4SAE1/protocol/openid-connect/certs
+
+
+     
+      
+  mysqldb:
+    image: mysql:5.6
+    container_name: db
+    ports:
+      - "3306:3306"
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=jobTest
+    volumes:
+        - db_mysql:/var/lib/mysql
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.3.1
+    container_name: keycloak
+    restart: always
+    command: start-dev --http-port=8099
+    environment:
+      - KC_BOOTSTRAP_ADMIN_USERNAME=admin
+      - KC_BOOTSTRAP_ADMIN_PASSWORD=admin
+      - KC_HOSTNAME_STRICT=false #désactive la vérification stricte du hostname
+                                  #autorise les requêtes provenant d’autres hôtes (comme localhost depuis Postman)
+    ports:
+      - "8068:8099"
+    volumes:
+      - ./data/keycloak:/opt/keycloak/data  # volume local sur le systeme
+      #- keycloak_data:/opt/keycloak/data   # volume Docker nommé
+      
+
+
+
+    
+    
+  

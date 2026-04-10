@@ -1,6 +1,7 @@
 package com.example.candidat4sae2;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,10 +22,17 @@ public class CandidatRestAPI {
 
     private String hello="Hello Esprit, I'm the candidate MS";
 
+
+
     @RequestMapping("/hello")
     public String sayHello(){
         return hello;
 
+    }
+
+    @RequestMapping("/jobs")
+    public List<Job> getAllJobs(){
+        return candidatService.getJobs();
     }
 
     @RequestMapping("/jobs/{id}")
@@ -32,12 +40,15 @@ public class CandidatRestAPI {
         return candidatService.getJobById(id);
     }
 
-    @RequestMapping("/jobs")
-    public List<Job> getAllJobs(){
-        return candidatService.getAllJobs();
-    }
+    /*@Value("${welcome.message}")
+    private String welcomeMessage;
 
-   @GetMapping
+    @GetMapping("/welcome")
+    public String welcome() {
+        return welcomeMessage;
+    }*/
+
+    @GetMapping
     public List<Candidat> getListCandid() {
         return candidatService.getAll();
     }

@@ -1,6 +1,7 @@
 package com.esprit.ms.job;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,13 +27,20 @@ public class JobRestAPI {
     @Autowired
     private JobService jobService;
 
+    /*@Value("${welcome.message}")
+    private String welcomeMessage;
+    @GetMapping("/welcome")
+    public String welcome() {
+        return welcomeMessage;
+    }
+*/
     @RequestMapping
     public ResponseEntity<List<Job>> getAll() {
         return new ResponseEntity<>(jobService.getAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public JobDTO getJob(@PathVariable int id) {
+    public Job getJob(@PathVariable int id) {
 
         return jobService.getJobById(id);
     }

@@ -4,17 +4,16 @@ package com.example.candidat4sae2;
 public class Job {
 
     private String service;
+
     private boolean etat;
 
     public Job() {
     }
 
-    public Job( String service, boolean etat) {
-
+    public Job(String service, boolean etat) {
         this.service = service;
         this.etat = etat;
     }
-
 
 
     public String getService() {
@@ -32,4 +31,5 @@ public class Job {
     public void setEtat(boolean etat) {
         this.etat = etat;
     }
+
 }

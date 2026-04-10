@@ -19,12 +19,11 @@ public class ApiGateway4Sae1Application {
     @Bean
     public RouteLocator gatewayRoutes(RouteLocatorBuilder builder){
         return builder.routes()
-                .route("C",r->r.path("/candidats/**")
+                .route("C1",r->r.path("/candidats/**")
                         .uri("lb://CANDIDAT4SAE2") )
 
-
                 .route("Job", r->r.path("/jobs/**")
-                        .uri("lb://JOB") )
+                        .uri("lb://job") )
                 .build();
     }
 
