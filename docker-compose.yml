@@ -52,8 +52,6 @@ services:
     container_name: eureka
     ports:
       - "8761:8761"
-    environment:
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
 
   API-gateway:
     build: ./APIGateway4SAE1
@@ -66,6 +64,7 @@ services:
       - config-server
       - candidat
       - job
+      - keycloak
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
       - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8686
@@ -91,21 +90,14 @@ services:
     image: quay.io/keycloak/keycloak:26.3.1
     container_name: keycloak
     restart: always
-    command: start-dev --http-port=8099
+    command: start-dev --http-port=8066
     environment:
       - KC_BOOTSTRAP_ADMIN_USERNAME=admin
       - KC_BOOTSTRAP_ADMIN_PASSWORD=admin
       - KC_HOSTNAME_STRICT=false #désactive la vérification stricte du hostname
                                   #autorise les requêtes provenant d’autres hôtes (comme localhost depuis Postman)
     ports:
-      - "8068:8099"
+      - "8066:8066"
     volumes:
       - ./data/keycloak:/opt/keycloak/data  # volume local sur le systeme
       #- keycloak_data:/opt/keycloak/data   # volume Docker nommé
-      
-
-
-
-    
-    
-  
